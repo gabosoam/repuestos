@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema de inventario</title>
+
+    <link href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../inspinia/css/animate.css" rel="stylesheet">
+    <link href="../inspinia/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../kendo/css/kendo.common-bootstrap.min.css" />
+    <link rel="stylesheet" href="../kendo/css/kendo.bootstrap.min.css" />
+    <link rel="stylesheet" href="../kendo/css/kendo.bootstrap.mobile.min.css" />
+
+
+</head>
+
+<body class="skin-2">
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <span>
+                                <img alt="image" class="img-circle" src="../inspinia/img/user.png" style="max-width: 50px" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs">
+                                        <strong class="font-bold">
+                                            <%= user.name%>
+                                        </strong>
+                                    </span>
+                                </span>
+                            </a>
+
+                        </div>
+                        <div class="logo-element">
+                            IN+
+                        </div>
+                    </li>
+                    <li class="active">
+                            <a href="/">
+                                <i class="fa fa-home"></i>
+                                <span class="nav-label">Inicio</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-cube"></i>
+                                <span class="nav-label">Productos</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+    
+                                <li>
+                                    <a href="/category">Tipos</a>
+                                </li>
+                                <li>
+                                    <a href="/brand">Marcas</a>
+                                </li>
+    
+                                <li>
+                                    <a href="/model">Códigos</a>
+                                </li>
+    
+                                <li>
+                                    <a href="/product">Números de serie</a>
+                                </li>
+    
+    
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/bill">
+                                <i class="fa fa-arrow-right"></i>
+                                <span class="nav-label">Ingresos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/vouchers">
+                                <i class="fa fa-arrow-left"></i>
+                                <span class="nav-label">Salidas</span>
+                            </a>
+                        </li>
+    
+    
+                        <li>
+                            <a href="/client">
+                                <i class="fa fa-address-book"></i>
+                                <span class="nav-label">Clientes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/provider">
+                                <i class="fa fa-truck"></i>
+                                <span class="nav-label">Proveedores</span>
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="/location">
+                                <i class="fa fa-map-marker"></i>
+                                <span class="nav-label">Ubicaciones</span>
+                            </a>
+                        </li>
+    
+                        <li>
+                            <a href="/logout">
+                                <i class="fa fa-sign-out"></i>
+                                <span class="nav-label">Cerrar sesión</span>
+                            </a>
+                        </li>
+
+                </ul>
+
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+
+
+
+            <div class="wrapper wrapper-content">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>
+                                    <img src="../images/nokia.png" width="100px" alt="">
+                                </h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+
+
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <button type="button" class="btn btn-default" onclick="print()">
+                                    <span class="fa fa-print"></span> Imprimir</button>
+                                <p>
+                                    <strong>Código: </strong>
+                                    <%= product.code %>
+                                </p>
+                                <p>
+                                    <strong>Producto: </strong>
+                                    <%= product.description %>
+                                </p>
+                                <p>
+                                    <strong>Número de serie: </strong>
+                                    <%= product.barcode %>
+                                </p>
+                                <hr>
+
+                                <div id="grid"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+
+
+            </div>
+            <div class="footer">
+                <div class="pull-right">
+                    Cineto Telecomunicaciones S.A.
+                </div>
+                <div>
+                    <strong>Copyright</strong> Cineto Telecomunicaciones S.A. &copy; 2017
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <% if (product) { %>
+        <script>
+            var productId = '<%= product.id %>'
+
+        </script>
+        <% } %>
+
+
+            <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+            <!-- Mainly scripts -->
+            <script src="../inspinia/js/jquery-3.1.1.min.js"></script>
+            <script src="../inspinia/js/bootstrap.min.js"></script>
+            <script src="../inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+            <script src="../inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+            <!-- Custom and plugin javascript -->
+            <script src="../inspinia/js/inspinia.js"></script>
+            <script src="../inspinia/js/plugins/pace/pace.min.js"></script>
+            <script src="../kendo/js/kendo.all.min.js"></script>
+            <script src="../kendo/js/jszip.min.js"></script>
+            <script src="../kendo/js/kendo.messages.es-MX.min.js"></script>
+            <script src="../js/jquery.PrintArea.js"></script>
+            <script src="../logic/history.js"></script>
+            <script src="../js/w3.js"></script>
+
+            <script>
+
+                $.get("/history/read/<%= product.id %>", function (data2) {
+                    console.log($('#Vouchers'))
+
+                    w3.displayObject("Vouchers", { voucherss: data2 });
+
+                });
+
+                function print() {
+                    $('#print').printArea();
+                }
+            </script>
+
+
+
+
+</body>
+
+</html>
+
+<div class="modal fade" id="modalReporte" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Historial</h4>
+            </div>
+            <div class="modal-body">
+
+                <button onclick="print()" type="button" class="btn btn-default">
+                    <span class="fa fa-print"></span> Imprimir</button>
+                <div id="print" style="min-width: 210mm; font-family: 'Arial Narrow'">
+
+                    <table style="width: 100%">
+                        <tr>
+                            <td></td>
+                            <td>
+                                <center>
+                                    <img class="" src="../images/nokia.png" width="280px" />
+
+
+
+
+                                </center>
+                            </td>
+                            <td style="text-align: right">
+
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <hr>
+                    <center>
+                        <strong style="font-size: 18px">Trazabilidad</strong>
+                    </center>
+                    <table style="width: 100%; font-size: 12px">
+                        <tr>
+                            <td>
+
+                                <address>
+                                    <p>
+                                        <strong>Nombre: </strong>
+                                        <%= product.description %>
+                                    </p>
+                                    <p>
+                                        <strong>Código: </strong>
+                                        <%= product.code %>
+                                    </p>
+
+                                    <p>
+                                        <strong>Número de serie: </strong>
+                                        <%= product.barcode %>
+                                    </p>
+                                </address>
+                            </td>
+                            <td style="text-align: right">
+
+                                <address>
+
+
+                                </address>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <hr>
+                    <table id="Vouchers" class="table ">
+                        <thead style="font-size:13px;">
+                            <tr>
+                                <th style="text-align: center">Tipo</th>
+                                <th style="text-align: center">Fecha</th>
+                                <th style="text-align: center">FDR</th>
+                                <th style="text-align: center">CSO</th>
+                                <th style="text-align: center">WBS</th>
+                                <th style="text-align: center">Ubicación</th>
+                                <th style="text-align: center">Proveedor</th>
+                                <th style="text-align: center">Empresa</th>
+                                <th style="text-align: center">Cliente</th>
+                                <th style="text-align: center">Empresa</th>
+                                <th style="text-align: center">Área</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size:11px;">
+                            <tr w3-repeat="voucherss">
+                                <td style="text-align: center">{{type2}}</td>
+                                <td style="text-align: center">{{date}}</td>
+                                <td style="text-align: center">{{fdr}}</td>
+                                <td style="text-align: center">{{cso}}</td>
+                                <td style="text-align: center">{{wbs}}</td>
+                                <td style="text-align: center">{{location}}</td>
+                                <td style="text-align: center">{{name}}</td>
+                                <td style="text-align: center">{{company}}</td>
+                                <td style="text-align: center">{{client}}</td>
+                                <td style="text-align: center">{{clientcompany}}</td>
+                                <td style="text-align: center">{{comment}}</td>
+
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                    <hr>
+
+
+
+
+
+                    <!-- <table style="width: 100%; border: 1; font-size: 12px ">
+                        <tr>
+                            <td>
+                                <center>
+                                    <p>
+                                        ENTREGADO POR
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br> _______________________________
+                                        <br>
+                                        <br>
+                                        <input type="text" style="border: 0; width: 100%; text-align: center; text-transform: uppercase">
+                                    </p>
+                                </center>
+
+
+                            </td>
+
+                            <td>
+                                <center>
+                                    <p>
+                                        REPRESENTANTE CINETO
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br> _______________________________
+                                        <br>
+                                        <br>
+                                       asasas
+                                    </p>
+                                </center>
+
+
+                            </td>
+
+                            <td>
+                                <center>
+                                    <p>
+                                        RECIBIDO POR
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br> _______________________________
+                                        <br>
+                                        <br>
+                                        <input type="text" style="border: 0; width: 100%; text-align: center; text-transform: uppercase">
+                                    </p>
+                                </center>
+
+
+                            </td>
+                        </tr>
+                    </table> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

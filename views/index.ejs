@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema de inventario</title>
+
+    <link href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../inspinia/css/animate.css" rel="stylesheet">
+    <link href="../inspinia/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../kendo/css/kendo.common-bootstrap.min.css" />
+    <link rel="stylesheet" href="../kendo/css/kendo.bootstrap.min.css" />
+    <link rel="stylesheet" href="../kendo/css/kendo.bootstrap.mobile.min.css" />
+
+
+</head>
+
+<body class="skin-2">
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile">
+                            <span>
+                                <img alt="image" class="img-circle" src="../inspinia/img/user.png" style="max-width: 50px" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs">
+                                        <strong class="font-bold">
+                                            <%= user.name%>
+                                        </strong>
+                                    </span>
+
+                                </span>
+                            </a>
+
+                        </div>
+                        <div class="logo-element">
+                            IN+
+                        </div>
+                    </li>
+                    <li class="active">
+                        <a href="/">
+                            <i class="fa fa-home"></i>
+                            <span class="nav-label">Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-cube"></i>
+                            <span class="nav-label">Productos</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level collapse">
+
+                            <li>
+                                <a href="/category">Tipos</a>
+                            </li>
+                            <li>
+                                <a href="/brand">Marcas</a>
+                            </li>
+
+                            <li>
+                                <a href="/model">Códigos</a>
+                            </li>
+
+                            <li>
+                                <a href="/product">Números de serie</a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/bill">
+                            <i class="fa fa-arrow-right"></i>
+                            <span class="nav-label">Ingresos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/vouchers">
+                            <i class="fa fa-arrow-left"></i>
+                            <span class="nav-label">Salidas</span>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <a href="/client">
+                            <i class="fa fa-address-book"></i>
+                            <span class="nav-label">Clientes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/provider">
+                            <i class="fa fa-truck"></i>
+                            <span class="nav-label">Proveedores</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/location">
+                            <i class="fa fa-map-marker"></i>
+                            <span class="nav-label">Ubicaciones</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/logout">
+                            <i class="fa fa-sign-out"></i>
+                            <span class="nav-label">Cerrar sesión</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+
+
+
+            <div class="wrapper wrapper-content">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>
+                                    <img src="../images/nokia.png" width="100px" alt="">
+                                </h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+
+
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <!-- <button class="btn btn-success" onclick="etiqueta()">Etiquetas</button> -->
+                                <div class="row">
+
+                                    <div class="col-md-3">
+
+                                        <div class="form-group">
+                                            <label for="codigo">Código:</label>
+                                            <input placeholder="Código del producto" type="codigo" class="form-control" id="codigo">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="serie">Número de serie:</label>
+                                            <input placeholder="Número de serie" type="text" class="form-control" id="serie">
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="col-md-3">
+
+                                        <div class="form-group">
+                                            <label for="fdr">FDR:</label>
+                                            <input placeholder="Ficha de reparación" type="codigo" class="form-control" id="fdr">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cso">CSO:</label>
+                                            <input placeholder="CSO" type="text" class="form-control" id="cso">
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-md-3">
+
+
+                                        <div class="form-group">
+                                            <label for="categorias">Tipo:</label>
+                                            <br>
+
+                                            <select class="form-control" id="Cat">
+                                                <option  value="">Todas las categorías</option>
+                                                <option w3-repeat="cat" value="{{id}}">{{name}}</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cso">WBS:</label>
+                                            <input placeholder="WBS" type="text" class="form-control" id="wbs">
+                                        </div>
+
+
+
+
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="mibuton">Acción</label>
+                                            <br>
+                                            <button id="mibuton" onclick="buscar()" class="btn btn-success">Buscar</button>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div id="grid2"></div>
+                                        <div id="grid4"></div>
+                                    </div>
+
+                                    <hr>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </div>
+
+
+            </div>
+            <div class="footer">
+                <div class="pull-right">
+                    Cineto Telecomunicaciones S.A.
+                </div>
+                <div>
+                    <strong>Copyright</strong> Cineto Telecomunicaciones S.A. &copy; 2017
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <button class="btn btn-success" onclick="print('Etiquetas')">Generar PDF</button>
+                    <center>
+                        <div id="Etiquetas" style="min-width: 180mm; font-family: 'Arial Narrow'; font-size: 10px">
+                            <table id="" class="table  table-bordered" style="width: 75%">
+                                <tbody>
+                                    <tr w3-repeat="etiquetas">
+
+                                        <td style="font-size: 10px">
+                                            <label>Producto:</label> {{description}}
+                                        </td>
+                                        <td style="font-size: 10px">{{code}}
+                                            <br> {{barcode}} </td>
+
+                                        <td style="font-size: 10px">
+                                            <label>Ubicación:</label>
+                                            <br> {{location}}
+                                        </td>
+
+                                        <td style="font-size: 10px">
+                                            <center>
+                                                <label>Cantidad:</label>
+                                                <br> 1
+                                            </center>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+
+                    </center>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal"></div>
+    <script>
+        var user = '<%= user.id%>';
+    </script>
+
+
+
+    <!-- Mainly scripts -->
+    <script src="../inspinia/js/jquery-3.1.1.min.js"></script>
+    <script src="../inspinia/js/bootstrap.min.js"></script>
+    <script src="../inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="../inspinia/js/inspinia.js"></script>
+    <script src="../inspinia/js/plugins/pace/pace.min.js"></script>
+    <script src="../kendo/js/kendo.all.min.js"></script>
+    <script src="../kendo/js/jszip.min.js"></script>
+    <script src="../kendo/js/kendo.messages.es-MX.min.js"></script>
+    <script src="../logic/changePassword.js"></script>
+
+    <!-- Jquery Validate -->
+    <script src="js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="../js/w3.js"></script>
+
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+    <script src="../logic/index.js"></script>
+    <script src="../logic/product.1.js"></script>
+    <script src="../js/jquery.PrintArea.js"></script>
+    <script src="../js/pdf/jspdf.min.js"></script>
+    <script src="../js/pdf/html2canvas.min.js"></script>
+    <script src="../js/pdf/html2pdf.js"></script>
+
+
+
+    <script type="text/javascript">
+        function print(elem) {
+            $('#Etiquetas').printArea();
+
+        }
+    </script>
+
+    <script>
+        $.get("/category/read", function (data2) {
+
+
+            w3.displayObject("Cat", {cat: data2});
+
+        });
+
+
+
+        function buscar() {
+
+            var code = { text: 'code', value: $('#codigo').val() };
+            var barcode = { text: 'barcode', value: $('#serie').val() };
+            var fdr = { text: 'fdr', value: $('#fdr').val() };
+            var cso = { text: 'cso', value: $('#cso').val() };
+            var tipo = { text: 'categoryid', value: $('#Cat').val() };
+            var wbs = { text: 'wbs', value: $('#wbs').val() };
+
+
+
+
+
+            var data = []
+
+            if (codigo.value.trim() != '') { data.push(code) }
+            if (barcode.value.trim() != '') { data.push(barcode) }
+            if (fdr.value.trim() != '') { data.push(fdr) }
+            if (cso.value.trim() != '') { data.push(cso) }
+            if (tipo.value.trim() != '') { data.push(tipo) }
+            if (wbs.value.trim() != '') { data.push(wbs) }
+
+            sql = "SELECT * FROM v_historico WHERE"
+
+
+
+            for (let i = 0; i < data.length; i++) {
+                if (i == 0) {
+                    sql = sql + " " + data[i].text + " LIKE '%" + data[i].value + "%' ";
+                } else {
+                    sql = sql + " AND " + data[i].text + " LIKE '%" + data[i].value + "%'";
+                }
+
+            }
+
+
+
+
+            if ($("#grid2").data("kendoGrid")) {
+                $("#grid2").data("kendoGrid").destroy();
+            }
+            $.post("/buscar", { sql: sql }, function (data) {
+                dataSource = new kendo.data.DataSource({
+                    data: data
+                },
+                );
+
+                $.get("/model/readmodel", function (codes) {
+                    $("#grid2").kendoGrid({
+                        dataSource: dataSource,
+                        height: 475,
+                        filterable: true,
+                        columnMenu: true,
+                        groupable: true,
+                        resizable: true,
+
+                        // <td style="text-align: center">{{type2}}</td>
+                        //         <td style="text-align: center">{{date}}</td>
+                        //         <td style="text-align: center">{{fdr}}</td>
+                        //         <td style="text-align: center">{{cso}}</td>
+                        //         <td style="text-align: center">{{wbs}}</td>
+                        //         <td style="text-align: center">{{location}}</td>
+                        //         <td style="text-align: center">{{name}}</td>
+                        //         <td style="text-align: center">{{company}}</td>
+                        //         <td style="text-align: center">{{client}}</td>
+                        //         <td style="text-align: center">{{clientcompany}}</td>
+                        //         <td style="text-align: center">{{comment}}</td>
+
+                        pageable: { refresh: true, pageSizes: true, },
+
+                        columns: [
+                            { field: "type2", title: "Transacción", filterable: { search: true, multi: true } },
+                       
+                            { field: "description", title: "Nombre", filterable: { search: true, multi: true } },
+                            { field: "code", title: "Código", filterable: { search: true, multi: true } },
+                            { field: "barcode", title: "Número de serie", filterable: { search: true, multi: true } },
+                            { field: "category", editable: false, title: "Tipo", filterable: { search: true, multi: true } },
+                            { field: "brand", editable: false, title: "Marca", filterable: { search: true, multi: true } },
+                            { field: "fdr", title: "FDR", filterable: { search: true, multi: true } },
+                            { field: "cso", title: "CSO", filterable: { search: true, multi: true } },
+                            { field: "wbs", title: "WBS", filterable: { search: true, multi: true } },
+                            
+                            { command: [{ text: "Historial", click: showDetails, iconClass: 'icon icon-chart-column' }], title: "Acciones" }],
+                        editable: "popup"
+                    });
+                });
+
+
+
+                function showDetails(e) {
+                    e.preventDefault();
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    location.href = "/history/" + dataItem.product;
+                }
+            });
+        }
+    </script>
+
+
+
+
+</body>
+
+</html>
+
+<style type="text/css">
+    #rcorners2 {
+        border-radius: 25px;
+        border: 2px solid black;
+        padding: 10px;
+        text-align: center;
+        width: 5.25cm;
+        margin: 5px 5px 5px 5px
+    }
+
+    #rcorners1 {
+        border: 1px solid black;
+        border-style: dashed;
+        padding: 10px
+    }
+
+    #Etiquetas {
+
+        padding: 30px
+    }
+</style>

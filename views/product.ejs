@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <html lang="es">
+
+    </html>
+
+    <title>Sistema de inventario</title>
+
+    <link href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../inspinia/css/animate.css" rel="stylesheet">
+    <link href="../inspinia/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../kendo/css/kendo.common-bootstrap.min.css" />
+    <link rel="stylesheet" href="../kendo/css/kendo.bootstrap.min.css" />
+    <link rel="stylesheet" href="../kendo/css/kendo.bootstrap.mobile.min.css" />
+
+
+</head>
+
+<body class="skin-2">
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <span>
+                                <img alt="image" class="img-circle" src="../inspinia/img/user.png" style="max-width: 50px" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs">
+                                        <strong class="font-bold">
+                                            <%= user.name%>
+                                        </strong>
+                                    </span>
+
+                                </span>
+                            </a>
+
+                        </div>
+                        <div class="logo-element">
+                            IN+
+                        </div>
+                    </li>
+
+
+
+                    <li class="">
+                        <a href="/">
+                            <i class="fa fa-home"></i>
+                            <span class="nav-label">Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-cube"></i>
+                            <span class="nav-label">Productos</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level collapse">
+
+                            <li>
+                                <a href="/category">Tipos</a>
+                            </li>
+                            <li>
+                                <a href="/brand">Marcas</a>
+                            </li>
+
+                            <li>
+                                <a href="/model">Códigos</a>
+                            </li>
+
+                            <li>
+                                <a href="/product">Números de serie</a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+                    <li class="active">
+                        <a href="/bill">
+                            <i class="fa fa-arrow-right"></i>
+                            <span class="nav-label">Ingresos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/vouchers">
+                            <i class="fa fa-arrow-left"></i>
+                            <span class="nav-label">Salidas</span>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <a href="/client">
+                            <i class="fa fa-address-book"></i>
+                            <span class="nav-label">Clientes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/provider">
+                            <i class="fa fa-truck"></i>
+                            <span class="nav-label">Proveedores</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/location">
+                            <i class="fa fa-map-marker"></i>
+                            <span class="nav-label">Ubicaciones</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/logout">
+                            <i class="fa fa-sign-out"></i>
+                            <span class="nav-label">Cerrar sesión</span>
+                        </a>
+                    </li>
+
+
+
+                </ul>
+
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+
+
+
+            <div class="wrapper wrapper-content">
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>
+                                    <img src="../images/nokia.png" width="100px" alt="">
+                                </h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div class="ibox-content">
+
+                                <div id="actions">
+                                        <button type="button" class="btn btn-default" onclick="openLotes()">
+                                                <span class="fa fa-print"></span> Ingreso por lotes</button>
+            
+                                            <button id="closeBill" class="btn btn-default">
+                                                <span class="fa fa-times-circle"></span> Cerrar ingreso</button>
+                                </div>
+                                
+
+                                <button id="btnPrint" type="button" class="btn btn-default" onclick="print()">
+                                    <span class="fa fa-print"></span> Imprimir</button>
+                                <hr>
+                                
+                                <form id="formIngreso">
+                                        <h4>Ingreso individual</h4>
+                                    <input type="hidden" value="<%= bill %>" name="bill">
+                                    <input type="hidden" value="1" id="txtCantidad" name="cant">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="txtCodigo">Código:</label>
+                                            <input required id="txtCodigo" validationMessage="Este campo es obligatorio" name="code" style="width: 100%;" />
+                                            <br>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+
+                                            <label for="txtSerie">Número de serie (S/N sin serie):</label>
+                                            <input required id="txtSerie" validationMessage="Este campo es obligatorio" name="barcode" style="width: 100%;" />
+                                            <br>
+
+
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="txtFdr">FDR:</label>
+                                            <input class="form-control" name="fdr" placeholder="Ingresar FDR" id="txtFdr" name="fdr" style="width: 100%;" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="txtCodigo">CSO:</label>
+                                            <input id="txtCso" placeholder="Ingresar CSO" name="cso" class="form-control" style="width: 100%;" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="txtCodigo">WBS:</label>
+                                            <input class="form-control" placeholder="Ingresar WBS" name="wbs" id="txtWbs" style="width: 100%;" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="txtCodigo">Comentario:</label>
+                                            <input class="form-control" placeholder="Ingresar comentario" name="comment" id="txtWbs" style="width: 100%;" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="txtSerie">Ubicación:</label>
+                                            <input required validationMessage="Este campo es obligatorio" id="txtUbicacion" name="location" name="barcode" style="width: 100%;"
+                                            />
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="txtSerie">Acción:</label>
+                                            <br>
+
+                                            <button onclick="guardarProducto()" class="btn btn-primary" type="button">Guardar</button>
+
+                                        </div>
+
+
+                                    </div>
+                                </form>
+                                <br>
+
+
+
+
+
+
+                                <div class="row">
+
+                                    <!-- <div id="actions">
+                                            <button onclick="openLotes()" class="btn btn-success float-right">Ingreso por lotes</button>
+                                            <button id="closeBill" class="btn btn-danger">Cerrar ingreso</button>
+                                    </div> -->
+
+                                    <div class="col-md-12">
+
+                                        <div id="grid2" tabindex="0"></div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </div>
+
+
+            </div>
+            <div class="footer">
+                <div class="pull-right">
+                    Cineto Telecomunicaciones S.A.
+                </div>
+                <div>
+                    <strong>Copyright</strong> Cineto Telecomunicaciones S.A. &copy; 2017
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Reporte</h4>
+                </div>
+                <div class="modal-body">
+                    <button onclick="print()" class="btn btn-primary">Imprimir</button>
+                    <div id="print" style="min-width: 210mm; font-family: 'Arial Narrow'">
+
+                        <table style="width: 100%">
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <center>
+                                        <img class="" src="../images/nokia.png" width="280px" />
+
+
+
+
+                                    </center>
+                                </td>
+                                <td style="text-align: right">
+                                    <h5>
+                                        <%=data.codigo%>
+                                    </h5>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <hr>
+                        <center>
+                            <strong style="font-size: 18px">Reporte de ingreso</strong>
+                        </center>
+                        <table style="width: 100%; font-size: 12px">
+                            <tr>
+                                <td>
+
+                                    <address>
+                                        <br>
+                                        <p>
+                                            <strong>Proveedor: </strong>
+                                            <%=data.name%>
+                                        </p>
+                                        <p>
+                                            <strong>Empresa: </strong>
+                                            <%=data.company%>
+                                        </p>
+
+                                        <br>
+
+
+                                    </address>
+                                </td>
+                                <td style="text-align: right">
+
+                                    <address>
+                                        <strong>Fecha:</strong>
+                                        <%=data.date%>
+                                            <br>
+                                            <strong>Referencia:</strong>
+                                            <%=data.reference%>
+
+                                    </address>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <hr>
+                        <table id="Vouchers" class="table ">
+                            <thead style="font-size:13px;">
+                                <tr>
+                                    <th style="text-align: center">Nombre</th>
+                                    <th style="text-align: center">Código</th>
+                                    <th style="text-align: center">No. de Serie</th>
+                                    <th style="text-align: center">Tipo</th>
+                                    <th style="text-align: center">Marca</th>
+                                    <th style="text-align: center">FDR</th>
+                                    <th style="text-align: center">CSO</th>
+                                    <th style="text-align: center">WBS</th>
+                                    <th style="text-align: center">Ubicación</th>
+                                    <th style="text-align: center">Área</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size:11px;">
+                                <tr w3-repeat="voucherss">
+                                    <td style="text-align: center">{{description}}</td>
+                                    <td style="text-align: center">{{code2}}</td>
+                                    <td style="text-align: center">{{barcode}}</td>
+                                    <td style="text-align: center">{{category}}</td>
+                                    <td style="text-align: center">{{brand}}</td>
+                                    <td style="text-align: center">{{fdr}}</td>
+                                    <td style="text-align: center">{{cso}}</td>
+                                    <td style="text-align: center">{{wbs}}</td>
+                                    <td style="text-align: center">{{location2}}</td>
+                                    <td style="text-align: center">
+                                        {{comment}}
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                        <hr>
+
+                        <!-- <div class="well m-t">
+                            <strong>Comentario</strong>
+                            <input class="form-control" type="text">
+                        </div> -->
+
+
+
+                        <table style="width: 100%; border: 1; font-size: 12px ">
+                            <tr>
+                                <td>
+                                    <center>
+                                        <p>
+                                            ENTREGADO POR
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br> _______________________________
+                                            <br>
+                                            <br>
+                                            <input type="text" style="border: 0; width: 100%; text-align: center; text-transform: uppercase">
+                                        </p>
+                                    </center>
+
+
+                                </td>
+
+                                <!--    <td>
+                                    <center>
+                                        <p>
+                                            REPRESENTANTE NOKIA
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br> _______________________________
+                                            <br>
+                                            <br>
+                                            <%=data.user%>
+                                        </p>
+                                    </center>
+
+
+                                </td> -->
+
+                                <td>
+                                    <center>
+                                        <p>
+                                            RECIBIDO POR
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br> _______________________________
+                                            <br>
+                                            <br>
+                                            <input type="text" style="border: 0; width: 100%; text-align: center; text-transform: uppercase">
+                                        </p>
+                                    </center>
+
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModalLotes" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Ingreso por lotes</h4>
+
+                </div>
+                <div class="modal-body">
+                    <a class="btn btn-link" href="../PLANTILLA.csv"> Descargar plantilla</a>
+                    <br>
+                    <br>
+                    <form class="form-horizontal ">
+
+                        <fieldset>
+                            <label for="csvFileInput">
+                                <strong>Seleccionar archivo CSV:</strong>
+                            </label>
+                            <input type="file" class="" id="csvFileInput" onchange="handleFiles(this.files)" accept=".csv">
+                            <br>
+                            <!-- <i id="spinner" class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i> -->
+
+                        </fieldset>
+                    </form>
+
+                </div>
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a data-toggle="tab" href="#tab-1"> Productos</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#tab-2">Nuevos códigos</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <button class="btn btn-primary" onclick="iniciar()">Iniciar ingreso</button>
+                                <div id="output2" style="height: 150; background-color: white"></div>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <button class="btn btn-primary" onclick="change()">Cambiar</button>
+                                <div id="output" style="height: 150; background-color: white"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Registrar modelo</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="formSaveModel">
+
+
+                        <div class="form-group">
+                            <label for="code">Código:</label>
+                            <input autofocus type="text" class="form-control" validationMessage="Selecciona un producto" required id="codeModal" name="code"
+                                style="width: 100%">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="pwd">Nombre:</label>
+                            <input type="text" class="form-control" validationMessage="Nombre" name="description" required id="description" style="width: 100%">
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="pwd">Categoría:</label>
+                            <input type="text" class="form-control" required name="category" id="category" style="width: 100%">
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+                            <label for="pwd">Marca:</label>
+                            <input type="text" class="form-control" required name="brand" id="brand" style="width: 100%">
+                        </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button id="saveModel" type="button" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal inmodal fade" id="modalNuevo" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title">Agregar producto</h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <form role="form" id="form">
+                        <div class="form-group">
+                            <label>Número de serie</label>
+                            <input pattern="[A-Za-z0-9]" id="barcode" maxlength="20" autofocus required type="text" name="barcode" placeholder="Ingresar número de serie"
+                                class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>FDR</label>
+                            <input type="text" id="fdr" name="fdr" placeholder="Ingresar ficha de reparación" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>CSO</label>
+                            <input type="text" name="cso" placeholder="Ingresar CSO" class="form-control">
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label>WBS</label>
+                            <input type="text" name="wbs" placeholder="Ingresar WBS" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Seleccionar ubicación</label>
+                            <select required class="form-control m-b" name="location">
+                                <option value="" disabled selected>Seleccionar una opción</option>
+                                <option>option 1</option>
+                                <option>option 2</option>
+                                <option>option 3</option>
+                                <option>option 4</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Comentario</label>
+                            <textarea class="form-control" name="comentary" id="" cols="30" rows="5"></textarea>
+
+                        </div>
+
+                        <button type="submit">Subir</button>
+
+                    </form>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarProducto()">Guardar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Mainly scripts -->
+    <script src="../inspinia/js/jquery-3.1.1.min.js"></script>
+    <script src="../inspinia/js/bootstrap.min.js"></script>
+    <script src="../inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="../inspinia/js/inspinia.js"></script>
+    <script src="../inspinia/js/plugins/pace/pace.min.js"></script>
+
+    <script src="../inspinia/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="../inspinia/js/plugins/validate/spanish.js"></script>
+
+    <script src="../kendo/js/kendo.all.min.js"></script>
+    <script src="../kendo/js/jszip.min.js"></script>
+    <script src="../kendo/js/kendo.messages.es-MX.min.js"></script>
+    <script src="../js/w3.js"></script>
+    <script src="../js/jquery.PrintArea.js"></script>
+    <script src="../js/datatables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#formIngreso").validate({
+                rules: {
+                    codigo_input: {
+                        required: true,
+                    },
+
+                    barcode_input: {
+                        required: true,
+                    },
+
+                    barcode: {
+                        required: true
+                    }
+
+
+                }
+            });
+        });
+
+        // $("form".validate({
+        //     rules: {
+        //         barcode: {
+        //             required: true,
+        //             remote: "/product/searchbarcode/" + $("#barcode").val()
+        //         }
+        //     }
+        // }))
+        function guardarProducto() {
+            var validator = $("#formIngreso").kendoValidator().data("kendoValidator"),
+                status = $(".status");
+
+            if (validator.validate()) {
+
+                var barcode = getFormData($("#formIngreso")).barcode_input;
+
+                if (barcode == 's/n' || barcode == 'S/N') {
+                    var cantidad = prompt('Ingrese la cantidad', 1)
+
+                    if (parseInt(cantidad)) {
+                        if (cantidad > 0) {
+                            $('#txtCantidad').val(cantidad);
+                            var data = $('#formIngreso').serialize();
+
+                            $.post("/product/create2", data, function (data) {
+                                if (data == true) {
+                                    alert('Producto guardado');
+                                    $('#grid2').data('kendoGrid').dataSource.read();
+                                    $('#grid2').data('kendoGrid').refresh();
+                                    actualizarReporte();
+
+                                    $('#formIngreso')[0].reset();
+                                } else {
+                                    alert('Algo salió mal');
+                                }
+                            });
+
+                        } else {
+                            alert('Ingrese una cantidad mayor a cero')
+                        }
+                    } else {
+                        alert('Ingrese una cantidad correcta')
+                    }
+
+                } else {
+                    $('#txtCantidad').val(1);
+                    var data = $('#formIngreso').serialize();
+
+                    $.post("/product/create2", data, function (data) {
+                        if (data == true) {
+                            $('#formIngreso')[0].reset();
+                            $('#grid2').data('kendoGrid').dataSource.read();
+                            $('#grid2').data('kendoGrid').refresh();
+                            actualizarReporte();
+                            alert('Producto guardado');
+
+                        } else {
+                            alert('Algo salió mal');
+                        }
+                    });
+
+                }
+
+
+
+
+
+
+            } else {
+
+            }
+
+        }
+
+        function getFormData($form) {
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+
+            $.map(unindexed_array, function (n, i) {
+                indexed_array[n['name']] = n['value'];
+            });
+
+            return indexed_array;
+        }
+
+    </script>
+
+
+    <script>
+
+        actualizarReporte()
+
+        function actualizarReporte() {
+            $.get("/bill/read/<%=bill%>", function (data2) {
+                console.log($('#Vouchers'))
+
+                w3.displayObject("Vouchers", { voucherss: data2 });
+
+            });
+        }
+
+
+        function print() {
+            $('#print').printArea();
+
+        }
+        function openLotes() {
+
+            $('#myModalLotes').modal();
+        }
+
+    </script>
+
+    <% if (bill) { %>
+        <script>
+            var bill = '<%= bill %>';
+            var userBill = '<%=data.iduser%>';
+            var userSession = '<%=user.id%>';
+            var user = '<%=data.user%>';
+            var reference = '<%=data.reference%>';
+        </script>
+        <% } %>
+
+            <% if (data.state == 0) { %>
+                <script src="../logic/product.1.js"></script>
+                <% } else { %>
+                    <script src="../logic/product.2.js"></script>
+                    <% } %>
+
+                        <script src="../logic/lotes.js"></script>
+
+
+
+</body>
+
+</html>
